@@ -75,12 +75,12 @@ namespace CodeCave.NetworkAgilityPack.Web
         /// <summary>
         /// Occurs when [progress completed].
         /// </summary>
-        event WebRequestProgressChangedEventHandler ProgressCompleted;
+        event EventHandler<WebRequestProgressChangedEventArgs> ProgressCompleted;
 
         /// <summary>
         /// Occurs when [progress changed].
         /// </summary>
-        event WebRequestProgressChangedEventHandler ProgressChanged;
+        event EventHandler<WebRequestProgressChangedEventArgs> ProgressChanged;
 
         #endregion
     }

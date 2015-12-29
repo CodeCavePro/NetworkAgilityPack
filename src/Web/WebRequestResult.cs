@@ -7,7 +7,7 @@ using System.Text;
 
 namespace CodeCave.NetworkAgilityPack.Web
 {
-    public abstract class WebRequestResult<TWreq, TWresp> : IWebRequestResult
+    public abstract class WebRequestResult<TWreq, TWresp> : IWebRequestResult, IDisposable
         where TWreq : WebRequest
         where TWresp : WebResponse
     {
@@ -15,6 +15,12 @@ namespace CodeCave.NetworkAgilityPack.Web
         protected Stream streamResponse;    // Stream to read from
         protected DateTime transferStart;   // Used for tracking x
         protected int statusCode;
+
+        private event EventHandler<WebRequestProgressChangedEventArgs> _progressCompleted;
+        private event EventHandler<WebRequestProgressChangedEventArgs> _progressChanged;
+        private event EventHandler<WebRequestProgressChangedEventArgs> _progressFailed;
+       
+        #region Constructors / Destructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WebRequestResult{TWreq, TWresp}"/> class.
@@ -26,6 +32,46 @@ namespace CodeCave.NetworkAgilityPack.Web
             streamResponse = null;
             statusCode = -1;
         }
+
+        /// <summary>
+        /// Finalizes an instance of the <see cref="WebRequestResult{TWreq, TWresp}"/> class.
+        /// </summary>
+        ~WebRequestResult()
+        {
+            Dispose();
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        public void Dispose(bool disposing)
+        {
+            if (!disposing)
+                return;
+
+            try
+            {
+                streamResponse?.Dispose();
+            }
+            finally
+            {
+                streamResponse = null;
+            }
+        }
+
+        #endregion
+
+        #region Properties
 
         /// <summary>
         /// Gets or sets the request.
@@ -107,6 +153,10 @@ namespace CodeCave.NetworkAgilityPack.Web
         /// </value>
         public bool IsSuccessful => (Exception == null && !IsStatusError());
 
+        #endregion
+
+        #region Methods
+
         /// <summary>
         /// Determines whether [is status error].
         /// </summary>
@@ -138,7 +188,7 @@ namespace CodeCave.NetworkAgilityPack.Web
                 Exception = ex;
                 ex.Response?.Close();
 
-                OnProgressCompleted(new WebRequestProgressChangedEventArgs(ex));
+                OnProgressFailed(new WebRequestProgressChangedEventArgs(ex));
             }
             finally
             {
@@ -164,7 +214,7 @@ namespace CodeCave.NetworkAgilityPack.Web
                 Exception = ex;
                 ex.Response?.Close();
 
-                OnProgressCompleted(new WebRequestProgressChangedEventArgs(ex));
+                OnProgressFailed(new WebRequestProgressChangedEventArgs(ex));
             }
             finally
             {
@@ -222,24 +272,25 @@ namespace CodeCave.NetworkAgilityPack.Web
 
                     if (numReadsCounter > numReadsBeforeProgUpdateDefault)
                     {
+                        // Calculate request progress and report it
                         var dateTimeNow = DateTime.Now;
                         var timeDiff = (dateTimeNow - lastUpdateTime).TotalSeconds;
                         var sizeDiff = bytesReadSoFar - lastUpdateDownloadedSize;
                         var transferSpeed = Math.Round(sizeDiff / timeDiff / 1024f, 2);
-
                         lastUpdateDownloadedSize = bytesReadSoFar;
                         lastUpdateTime = dateTimeNow;
 
-                        // Calculate request progress and report it
+                        // Reset reads counter
+                        numReadsCounter = 0;
+
+                        // Report the progress
                         var args = new WebRequestProgressChangedEventArgs(bytesReadSoFar, totalBytesToRead, DateTime.Now - transferStart, transferSpeed, 99);
                         OnProgressChanged(args);
-                        numReadsCounter = 0; // reset reads count
                     }
                     else
                     {
                         numReadsCounter++;
                     }
-
                 }
                 // go if some amount of bytes has been read and stream can go on reading 
                 while (bytesRead > 0 && streamResponse.CanRead);
@@ -255,8 +306,6 @@ namespace CodeCave.NetworkAgilityPack.Web
             finally
             {
                 streamResponse?.Close();
-                streamResponse?.Dispose();
-                streamResponse = null;
             }
         }
 
@@ -287,31 +336,64 @@ namespace CodeCave.NetworkAgilityPack.Web
             }
         }
 
+        #endregion
+
         #region Events
 
-        private event WebRequestProgressChangedEventHandler _progressCompleted;
-        public event WebRequestProgressChangedEventHandler ProgressCompleted
+        /// <summary>
+        /// Occurs when [progress completed].
+        /// </summary>
+        public event EventHandler<WebRequestProgressChangedEventArgs> ProgressCompleted
         {
             add { _progressCompleted += value; }
             remove { _progressCompleted -= value; }
         }
 
+        /// <summary>
+        /// Raises the <see cref="E:ProgressCompleted" /> event.
+        /// </summary>
+        /// <param name="e">The <see cref="WebRequestProgressChangedEventArgs"/> instance containing the event data.</param>
         protected virtual void OnProgressCompleted(WebRequestProgressChangedEventArgs e)
         {
             var handler = _progressCompleted;
             handler?.Invoke(this, e);
         }
 
-        private event WebRequestProgressChangedEventHandler _progressChanged;
-        public event WebRequestProgressChangedEventHandler ProgressChanged
+        /// <summary>
+        /// Occurs when [progress changed].
+        /// </summary>
+        public event EventHandler<WebRequestProgressChangedEventArgs> ProgressChanged
         {
             add { _progressChanged += value; }
             remove { _progressChanged -= value; }
         }
 
+        /// <summary>
+        /// Raises the <see cref="E:ProgressChanged" /> event.
+        /// </summary>
+        /// <param name="e">The <see cref="WebRequestProgressChangedEventArgs"/> instance containing the event data.</param>
         protected virtual void OnProgressChanged(WebRequestProgressChangedEventArgs e)
         {
             var handler = _progressChanged;
+            handler?.Invoke(this, e);
+        }
+
+        /// <summary>
+        /// Occurs when [progress failed].
+        /// </summary>
+        public event EventHandler<WebRequestProgressChangedEventArgs> ProgressFailed
+        {
+            add { _progressFailed += value; }
+            remove { _progressFailed -= value; }
+        }
+
+        /// <summary>
+        /// Raises the <see cref="E:ProgressFailed" /> event.
+        /// </summary>
+        /// <param name="e">The <see cref="WebRequestProgressChangedEventArgs"/> instance containing the event data.</param>
+        protected virtual void OnProgressFailed(WebRequestProgressChangedEventArgs e)
+        {
+            var handler = _progressFailed;
             handler?.Invoke(this, e);
         }
 

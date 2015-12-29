@@ -75,7 +75,6 @@
     <Compile Include="Socks\Web\HttpWebResponseSocks.cs" />
     <Compile Include="Socks\Web\HttpWebRequestSocks.cs" />
     <Compile Include="Web\Events\WebRequestProgressChangedEventArgs.cs" />
-    <Compile Include="Web\Events\WebRequestProgressChangedEventHandler.cs" />
     <Compile Include="Web\IWebRequestResult.cs" />
     <Compile Include="Web\WebRequestResult.cs" />
     <Compile Include="Web\WebRequestSettings.cs" />
