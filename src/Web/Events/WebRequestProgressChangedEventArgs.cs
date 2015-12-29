@@ -25,39 +25,6 @@ namespace CodeCave.NetworkAgilityPack.Web
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WebRequestProgressChangedEventArgs"/> class.
-        /// </summary>
-        /// <param name="exception">The exception.</param>
-        public WebRequestProgressChangedEventArgs(Exception exception) 
-            : base(100, Convert.ToBase64String(Guid.NewGuid().ToByteArray()))
-        {
-            Exception = exception;
-
-            try
-            {
-                var webException = exception as WebException;
-                if (webException == null)
-                    return;
-
-                ProcessedBytes = 0;
-                TotalBytes = webException.Response?.ContentLength ?? 0;
-                TransferRate = 0;
-            }
-            finally
-            {
-                
-            }
-        }
-
-        /// <summary>
-        /// Gets the exception.
-        /// </summary>
-        /// <value>
-        /// The exception.
-        /// </value>
-        public Exception Exception { get; }
-
-        /// <summary>
         /// The number of processed bytes.
         /// </summary>
         /// <value>

@@ -59,6 +59,7 @@
     <Compile Include="Http\IHttpWebRequestResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Socks\SocksProxyException.cs" />
+    <Compile Include="Web\Events\WebRequestProgressCompletedEventArgs.cs" />
     <Compile Include="Web\WebProxyCredential.cs" />
     <Compile Include="Web\WebProxySocks.cs" />
     <Compile Include="Socks\Auth\AuthNoneSocket.cs" />
