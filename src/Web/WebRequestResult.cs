@@ -7,7 +7,7 @@ using System.Text;
 
 namespace CodeCave.NetworkAgilityPack.Web
 {
-    public abstract class WebRequestResult<TWreq, TWresp> : IWebRequestResult, IProgress<WebRequestProgressChangedEventArgs> 
+    public abstract class WebRequestResult<TWreq, TWresp> : IWebRequestResult
         where TWreq : WebRequest
         where TWresp : WebResponse
     {
@@ -138,7 +138,7 @@ namespace CodeCave.NetworkAgilityPack.Web
                 Exception = ex;
                 ex.Response?.Close();
 
-                Report(new WebRequestProgressChangedEventArgs(ex));
+                OnProgressCompleted(new WebRequestProgressChangedEventArgs(ex));
             }
             finally
             {
@@ -164,7 +164,7 @@ namespace CodeCave.NetworkAgilityPack.Web
                 Exception = ex;
                 ex.Response?.Close();
 
-                Report(new WebRequestProgressChangedEventArgs(ex));
+                OnProgressCompleted(new WebRequestProgressChangedEventArgs(ex));
             }
             finally
             {
@@ -231,7 +231,8 @@ namespace CodeCave.NetworkAgilityPack.Web
                         lastUpdateTime = dateTimeNow;
 
                         // Calculate request progress and report it
-                        Report(new WebRequestProgressChangedEventArgs(bytesReadSoFar, totalBytesToRead, DateTime.Now - transferStart, transferSpeed, 99));
+                        var args = new WebRequestProgressChangedEventArgs(bytesReadSoFar, totalBytesToRead, DateTime.Now - transferStart, transferSpeed, 99);
+                        OnProgressChanged(args);
                         numReadsCounter = 0; // reset reads count
                     }
                     else
@@ -243,13 +244,12 @@ namespace CodeCave.NetworkAgilityPack.Web
                 // go if some amount of bytes has been read and stream can go on reading 
                 while (bytesRead > 0 && streamResponse.CanRead);
 
-                Report(new WebRequestProgressChangedEventArgs(bytesReadSoFar, totalBytesToRead, DateTime.Now - transferStart, 0, 100));
+                OnProgressCompleted(new WebRequestProgressChangedEventArgs(bytesReadSoFar, totalBytesToRead, DateTime.Now - transferStart, 0));
             }
             catch (Exception ex)
             {
                 Exception = ex;
                 bufferRead = null;
-                Report(new WebRequestProgressChangedEventArgs(ex));
                 throw;
             }
             finally
@@ -284,22 +284,6 @@ namespace CodeCave.NetworkAgilityPack.Web
 
                 // Set the rest of the headers
                 Request.Headers.Set(headerKey, headers[headerKey]);
-            }
-        }
-
-        /// <summary>
-        /// Reports the specified value.
-        /// </summary>
-        /// <param name="args">The <see cref="WebRequestProgressChangedEventArgs" /> instance containing the event data.</param>
-        public void Report(WebRequestProgressChangedEventArgs args)
-        {
-            if (args.ProgressPercentage == 100)
-            {
-                OnProgressCompleted(args);
-            }
-            else
-            {
-                OnProgressChanged(args);
             }
         }
 

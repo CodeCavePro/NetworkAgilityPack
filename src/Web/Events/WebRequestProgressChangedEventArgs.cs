@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Net;
 
 namespace CodeCave.NetworkAgilityPack.Web
 {
@@ -23,10 +24,29 @@ namespace CodeCave.NetworkAgilityPack.Web
             TransferRate = transferRate;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WebRequestProgressChangedEventArgs"/> class.
+        /// </summary>
+        /// <param name="exception">The exception.</param>
         public WebRequestProgressChangedEventArgs(Exception exception) 
             : base(100, Convert.ToBase64String(Guid.NewGuid().ToByteArray()))
         {
             Exception = exception;
+
+            try
+            {
+                var webException = exception as WebException;
+                if (webException == null)
+                    return;
+
+                BytesReceived = 0;
+                TotalBytesToReceive = webException.Response?.ContentLength ?? 0;
+                TransferRate = 0;
+            }
+            finally
+            {
+                
+            }
         }
 
         /// <summary>
@@ -68,7 +88,6 @@ namespace CodeCave.NetworkAgilityPack.Web
         /// Total bytes to receive.
         /// </value>
         public long TotalBytesToReceive { get; }
-
 
         /// <summary>
         /// Gets the total KB to receive.
