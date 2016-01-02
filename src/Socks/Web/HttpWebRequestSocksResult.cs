@@ -33,7 +33,8 @@ namespace CodeCave.NetworkAgilityPack.Socks.Web
         {
             return new HttpWebRequestSocksResult
             {
-                Request = (HttpWebRequestSocks)HttpWebRequestSocks.Create(uri)
+                Request = (HttpWebRequestSocks) HttpWebRequestSocks.Create(uri),
+                Uri = uri
             };
         }
     }

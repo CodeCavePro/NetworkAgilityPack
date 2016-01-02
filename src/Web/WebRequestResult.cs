@@ -21,6 +21,7 @@ namespace CodeCave.NetworkAgilityPack.Web
         protected Stream streamResponse;    // Stream to read from
         protected DateTime transferStart;   // Used for tracking x
         protected int statusCode;
+        protected long? totalBytes;
         protected bool cancelAsync;
 
         private event EventHandler<WebRequestProgressCompletedEventArgs> _progressCompleted;
@@ -35,9 +36,9 @@ namespace CodeCave.NetworkAgilityPack.Web
         /// <param name="buffSize">Size of the buff.</param>
         protected WebRequestResult(int buffSize = 8192)
         {
-            Reset();
+            Reset(buffSize);
         }
-
+        
         /// <summary>
         /// Finalizes an instance of the <see cref="WebRequestResult{TWreq, TWresp}"/> class.
         /// </summary>
@@ -167,7 +168,18 @@ namespace CodeCave.NetworkAgilityPack.Web
         /// <value>
         /// The status code.
         /// </value>
-        public virtual int StatusCode => statusCode = Response?.GetStatusCode() ?? 0;
+        public virtual int StatusCode
+        {
+            get
+            {
+                if (statusCode < 0)
+                {
+                    statusCode = Response?.GetStatusCode() ?? 0;
+                }
+                
+                return statusCode;
+            }
+        }
 
         /// <summary>
         /// Gets the total bytes.
@@ -175,7 +187,18 @@ namespace CodeCave.NetworkAgilityPack.Web
         /// <value>
         /// The total bytes.
         /// </value>
-        public long TotalBytes => Response?.ContentLength ?? 0L;
+        public long TotalBytes
+        {
+            get
+            {
+                if (totalBytes == null)
+                {
+                    totalBytes = Response?.ContentLength ?? 0L;
+                }
+
+                return totalBytes.GetValueOrDefault();
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether this instance is successful.
@@ -435,7 +458,9 @@ namespace CodeCave.NetworkAgilityPack.Web
             bufferRead = new byte[buffSize];
             streamResponse = null;
             statusCode = -1;
+            totalBytes = null;
             cancelAsync = false;
+            Encoding = Encoding.UTF8;
         }
 
         #endregion

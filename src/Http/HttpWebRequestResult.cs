@@ -33,7 +33,8 @@ namespace CodeCave.NetworkAgilityPack.Http
         {
             return new HttpWebRequestResult
             {
-                Request = (HttpWebRequest)WebRequest.Create(uri)
+                Request = (HttpWebRequest)WebRequest.Create(uri),
+                Uri = uri
             };
         }
 
