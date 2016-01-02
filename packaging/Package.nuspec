@@ -2,12 +2,12 @@
 <package xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <id>NetworkAgilityPack</id>
-    <version>0.3.4</version>
+    <version>0.3.5</version>
     <authors>Zhmayev Yaroslav</authors>
     <owners>Zhmayev Yaroslav</owners>
     <licenseUrl>https://raw.githubusercontent.com/CodeCavePro/NetworkAgilityPack/master/LICENSE.md</licenseUrl>
     <projectUrl>https://github.com/CodeCavePro/NetworkAgilityPack</projectUrl>
-    <iconUrl>https://github.com/CodeCavePro/NetworkAgilityPack/raw/master/doc/logo/logo.png</iconUrl>
+    <iconUrl>https://github.com/CodeCavePro/NetworkAgilityPack/raw/master/content/logo.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <tags>web http request response socks proxy</tags>
     <description>A set of tools that help developers to interact with Web and other Internet resources</description>
