@@ -5,6 +5,11 @@ using CodeCave.NetworkAgilityPack.Web;
 
 namespace CodeCave.NetworkAgilityPack.Http
 {
+    /// <summary>
+    /// A wrapper for HttpWebRequest and HttpWebResponse
+    /// </summary>
+    /// <seealso cref="T:CodeCave.NetworkAgilityPack.Web.WebRequestResult{System.Net.HttpWebRequest, System.Net.HttpWebResponse}" />
+    /// <seealso cref="T:CodeCave.NetworkAgilityPack.Http.IHttpWebRequestResult" />
     public sealed class HttpWebRequestResult : WebRequestResult<HttpWebRequest, HttpWebResponse>, IHttpWebRequestResult
     {
         /// <summary>

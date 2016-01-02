@@ -10,6 +10,9 @@ using CodeCave.NetworkAgilityPack.Socks.Web;
 
 namespace CodeCave.NetworkAgilityPack
 {
+    /// <summary>
+    /// WebHeaderCollection class extension methods
+    /// </summary>
     public static class WebHeaderCollectionExtensions
     {
         /// <summary>
@@ -53,6 +56,9 @@ namespace CodeCave.NetworkAgilityPack
         }
     }
 
+    /// <summary>
+    /// HttpStatusCode class extension methods
+    /// </summary>
     public static class HttpStatusCodeExtensions
     {
         /// <summary>
@@ -92,6 +98,9 @@ namespace CodeCave.NetworkAgilityPack
         }
     }
 
+    /// <summary>
+    /// Uri class extension methods
+    /// </summary>
     public static class UriExtensions
     {
         /// <summary>
@@ -118,7 +127,9 @@ namespace CodeCave.NetworkAgilityPack
         }
     }
 
-
+    /// <summary>
+    /// WebRequest class extension methods
+    /// </summary>
     public static class WebRequestExtensions
     {
         /// <summary>
@@ -155,6 +166,9 @@ namespace CodeCave.NetworkAgilityPack
         }
     }
 
+    /// <summary>
+    /// WebResponse class extension methods
+    /// </summary>
     public static class WebResponseExtensions
     {
         /// <summary>
@@ -181,6 +195,9 @@ namespace CodeCave.NetworkAgilityPack
         }
     }
 
+    /// <summary>
+    /// Enum class extension methods
+    /// </summary>
     public static class EnumExtensions
     {
         /// <summary>
@@ -228,6 +245,9 @@ namespace CodeCave.NetworkAgilityPack
         }
     }
 
+    /// <summary>
+    /// IPAddress class extension methods
+    /// </summary>
     public static class IPAddressExtensions
     {
         /// <summary>
@@ -249,6 +269,9 @@ namespace CodeCave.NetworkAgilityPack
         }
     }
 
+    /// <summary>
+    /// NetworkCredential class extension methods
+    /// </summary>
     public static class NetworkCredentialExtensions
     {
         /// <summary>
@@ -285,6 +308,9 @@ namespace CodeCave.NetworkAgilityPack
         }
     }
 
+    /// <summary>
+    /// KnownHttpVerb class extension methods
+    /// </summary>
     public static class KnownHttpVerbExtensions
     {
         /// <summary>
@@ -302,6 +328,9 @@ namespace CodeCave.NetworkAgilityPack
         }
     }
 
+    /// <summary>
+    /// Encoding class extension methods
+    /// </summary>
     public static class EncodingExtensions
     {
         /// <summary>

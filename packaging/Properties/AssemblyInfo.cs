@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("CodeCave.NetworkAgilityPack.NuGet")]
-[assembly: AssemblyCopyright("Copyright © CodeCave 2015")]
+[assembly: AssemblyCopyright("Copyright © CodeCave 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

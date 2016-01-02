@@ -9,6 +9,9 @@ using CodeCave.NetworkAgilityPack.Socks.Web;
 
 namespace CodeCave.NetworkAgilityPack.Web
 {
+    /// <summary>
+    /// Factory for WebRequest creation (based on proxy)
+    /// </summary>
     public class WebRequestFactory
     {
         /// <summary>

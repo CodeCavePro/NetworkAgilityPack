@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("A set of tools that help developers to interact with Web and other Internet resources")]
 [assembly: AssemblyCompany("CodeCave")]
 [assembly: AssemblyProduct("NetworkAgilityPack")]
-[assembly: AssemblyCopyright("Copyright © CodeCave 2015")]
+[assembly: AssemblyCopyright("Copyright © CodeCave 2016")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 

@@ -3,6 +3,10 @@ using System.Net;
 
 namespace CodeCave.NetworkAgilityPack.Auth
 {
+    /// <summary>
+    /// Authentication method for an URI with username and password
+    /// </summary>
+    /// <seealso cref="T:CodeCave.NetworkAgilityPack.Auth.AuthUserPass{System.Uri}" />
     public class AuthUserPassUri : AuthUserPass<Uri>
     {
         #region Constructors

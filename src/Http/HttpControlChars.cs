@@ -1,6 +1,6 @@
 ﻿namespace CodeCave.NetworkAgilityPack.Http
 {
-    struct HttpControlChars
+    internal struct HttpControlChars
     {
         public const string SP = " ";
         public const string CR = "\r";

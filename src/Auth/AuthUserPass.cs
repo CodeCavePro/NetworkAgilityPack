@@ -2,8 +2,16 @@
 
 namespace CodeCave.NetworkAgilityPack.Auth
 {
+    /// <summary>
+    /// Authentication object with user name and password
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <seealso cref="CodeCave.NetworkAgilityPack.Auth.AuthMethod{T}" />
     public abstract class AuthUserPass<T> : AuthMethod<T>
     {
+        /// <summary>
+        /// Underlying credential object
+        /// </summary>
         protected NetworkCredential credential;
 
         /// <summary>

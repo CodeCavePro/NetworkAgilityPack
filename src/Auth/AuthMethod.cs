@@ -3,7 +3,7 @@ using System;
 namespace CodeCave.NetworkAgilityPack.Auth
 {
 	/// <summary>
-	/// Implements a SOCKS authentication scheme.
+	/// A base class for authentication
 	/// </summary>
 	/// <remarks>This is an abstract class; it must be inherited.</remarks>
 	public abstract class AuthMethod<T> : IAuthMethod

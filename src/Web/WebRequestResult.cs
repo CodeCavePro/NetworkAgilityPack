@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -10,20 +9,47 @@ using System.Text;
 namespace CodeCave.NetworkAgilityPack.Web
 {
     /// <summary>
-    /// 
+    /// Web request result object
     /// </summary>
-    /// <typeparam name="TWreq">The type of the wreq.</typeparam>
-    /// <typeparam name="TWresp">The type of the wresp.</typeparam>
+    /// <typeparam name="TWreq">The type of the web request.</typeparam>
+    /// <typeparam name="TWresp">The type of the web response.</typeparam>
     public abstract class WebRequestResult<TWreq, TWresp> : IWebRequestResult, IDisposable
             where TWreq : WebRequest
             where TWresp : WebResponse
     {
-        protected byte[] bufferRead;        // Buffer to read data into
-        protected Stream streamResponse;    // Stream to read from
-        protected DateTime transferStart;   // Used for tracking x
+        /// <summary>
+        /// Buffer to read data into
+        /// </summary>
+        protected byte[] bufferRead;
+
+        /// <summary>
+        /// Stream to read from
+        /// </summary>
+        protected Stream streamResponse;
+
+        /// <summary>
+        /// Used for tracking request start
+        /// </summary>
+        protected DateTime transferStart;
+
+        /// <summary>
+        /// Request status code
+        /// </summary>
         protected int statusCode;
+
+        /// <summary>
+        /// Total bytes to receive
+        /// </summary>
         protected long? totalBytes;
+
+        /// <summary>
+        /// Flag which indicates if asynchronous request should be cancelled
+        /// </summary>
         protected bool cancelAsync;
+
+        /// <summary>
+        /// Request content
+        /// </summary>
         protected byte[] content;
 
         private event EventHandler<WebRequestProgressCompletedEventArgs> _progressCompleted;

@@ -3,6 +3,10 @@ using CodeCave.NetworkAgilityPack.Socks;
 
 namespace CodeCave.NetworkAgilityPack.Web
 {
+    /// <summary>
+    /// WebProxy via Socks protocol
+    /// </summary>
+    /// <seealso cref="System.Net.WebProxy" />
     public sealed class WebProxySocks : WebProxy
     {
         /// <summary>

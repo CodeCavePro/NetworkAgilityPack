@@ -7,6 +7,10 @@ using System.Net.Mime;
 
 namespace CodeCave.NetworkAgilityPack.Socks.Web
 {
+    /// <summary>
+    /// HttpWebResponse via Socks
+    /// </summary>
+    /// <seealso cref="System.Net.WebResponse" />
     public sealed class HttpWebResponseSocks : WebResponse
     {
         #region Member Variables

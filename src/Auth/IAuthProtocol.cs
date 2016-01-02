@@ -4,6 +4,9 @@ using CodeCave.NetworkAgilityPack.Socks;
 
 namespace CodeCave.NetworkAgilityPack.Auth
 {
+    /// <summary>
+    /// Interface which defines basic methods for authentication protocol
+    /// </summary>
     public interface IAuthProtocol
     {
         #region Methods

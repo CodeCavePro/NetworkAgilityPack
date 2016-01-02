@@ -5,7 +5,7 @@ using CodeCave.NetworkAgilityPack.Web;
 
 namespace CodeCave.NetworkAgilityPack.Socks
 {
-	public class SocketWithProxy : Socket
+	internal class SocketWithProxy : Socket
     {
         #region Constructors
 

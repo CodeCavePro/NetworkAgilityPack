@@ -11,6 +11,10 @@ using CodeCave.NetworkAgilityPack.Web;
 
 namespace CodeCave.NetworkAgilityPack.Socks.Web
 {
+    /// <summary>
+    /// HttpWebResponse via Socks
+    /// </summary>
+    /// <seealso cref="System.Net.WebRequest" />
     public sealed class HttpWebRequestSocks : WebRequest
     {
         private byte[] _requestContentBuffer;

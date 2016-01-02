@@ -5,6 +5,9 @@ using CodeCave.NetworkAgilityPack.Socks;
 
 namespace CodeCave.NetworkAgilityPack.Web
 {
+    /// <summary>
+    /// Web request settings
+    /// </summary>
     public class WebRequestSettings
     {
         #region Properties
@@ -64,7 +67,7 @@ namespace CodeCave.NetworkAgilityPack.Web
         /// </summary>
         /// <value>
         /// The proxy.
-        /// </value
+        /// </value>
         public virtual IWebProxy Proxy
         {
             get

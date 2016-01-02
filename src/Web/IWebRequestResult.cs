@@ -5,6 +5,9 @@ using System.Text;
 
 namespace CodeCave.NetworkAgilityPack.Web
 {
+    /// <summary>
+    /// Defines methods and properties of WebRequestResult objects
+    /// </summary>
     public interface IWebRequestResult
     {
         /// <summary>
