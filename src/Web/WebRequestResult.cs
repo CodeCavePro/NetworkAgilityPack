@@ -257,7 +257,7 @@ namespace CodeCave.NetworkAgilityPack.Web
         }
 
         /// <summary>
-        /// Gots the response.
+        /// Call back executed when response object got asynchronously.
         /// </summary>
         /// <param name="asyncResult">The asynchronous result.</param>
         private void GotWebResponse(IAsyncResult asyncResult)
@@ -319,10 +319,10 @@ namespace CodeCave.NetworkAgilityPack.Web
         {
             try
             {
-                // Skip the reqst if the request contains error
+                // Skip the request if the request contains error
                 if (!IsSuccessful)
                 {
-                    Exception = new InvalidOperationException("Failed to get the resposnse stream!");
+                    Exception = new InvalidOperationException("Failed to get the response stream!");
                     bufferRead = null;
                     return;
                 }
@@ -339,7 +339,7 @@ namespace CodeCave.NetworkAgilityPack.Web
 
                 if (streamResponse == null)
                 {
-                    Exception = new InvalidOperationException("Failed to get the resposnse stream!");
+                    Exception = new InvalidOperationException("Failed to get the response stream!");
                     bufferRead = null;
                     return;
                 }
