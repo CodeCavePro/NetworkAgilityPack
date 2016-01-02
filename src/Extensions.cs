@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using CodeCave.NetworkAgilityPack.Http;
 using CodeCave.NetworkAgilityPack.Socks.Web;
 
@@ -298,6 +299,32 @@ namespace CodeCave.NetworkAgilityPack
             if (!Enum.TryParse(stringValue, true, out verb))
                 throw new InvalidDataException($"Invalid KnownHttpVerb value: {stringValue}");
             return verb;
+        }
+    }
+
+    public static class EncodingExtensions
+    {
+        /// <summary>
+        /// Converts the charset to encoding.
+        /// </summary>
+        /// <param name="charset">Charset name.</param>
+        /// <param name="fallbackEncoding">Fallback encoding.</param>
+        /// <returns></returns>
+        public static Encoding CharsetToEncoding(this string charset, Encoding fallbackEncoding)
+        {
+            var encodingInfo = Encoding.GetEncodings().FirstOrDefault(e => e.Name.Equals(charset, StringComparison.OrdinalIgnoreCase));
+            var encoding = encodingInfo?.GetEncoding();
+            return encoding ?? fallbackEncoding;
+        }
+
+        /// <summary>
+        /// Converts the charset to encoding.
+        /// </summary>
+        /// <param name="charset">Charset name.</param>
+        /// <returns></returns>
+        public static Encoding CharsetToEncoding(this string charset)
+        {
+            return CharsetToEncoding(charset, Encoding.UTF8);
         }
     }
 }

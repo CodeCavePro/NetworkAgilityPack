@@ -44,6 +44,9 @@ namespace CodeCave.NetworkAgilityPack.Http
         /// <param name="headers">The headers.</param>
         public override void AddHeaders(Dictionary<HttpRequestHeader, string> headers)
         {
+            if (headers == null)
+                throw  new ArgumentNullException(nameof(headers));
+
             // Set "restricted" header fields directly http://stackoverflow.com/questions/239725/cannot-set-some-http-headers-when-using-system-net-webrequest
             foreach (var header in headers)
             {

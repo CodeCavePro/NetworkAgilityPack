@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Mime;
 using System.Text;
 
 namespace CodeCave.NetworkAgilityPack.Web
@@ -23,6 +24,7 @@ namespace CodeCave.NetworkAgilityPack.Web
         protected int statusCode;
         protected long? totalBytes;
         protected bool cancelAsync;
+        protected byte[] content;
 
         private event EventHandler<WebRequestProgressCompletedEventArgs> _progressCompleted;
         private event EventHandler<WebRequestProgressChangedEventArgs> _progressChanged;
@@ -152,7 +154,7 @@ namespace CodeCave.NetworkAgilityPack.Web
         /// <value>
         /// The encoding.
         /// </value>
-        public Encoding Encoding { get; set; }
+        public Encoding Encoding { get; private set; }
 
         /// <summary>
         /// Gets the URI.
@@ -272,7 +274,7 @@ namespace CodeCave.NetworkAgilityPack.Web
         }
 
         /// <summary>
-        /// Cancels the asynchronous SendAsync method.
+        /// Cancels the asynchronous SendAsync method execution.
         /// </summary>
         public void CancelAsync()
         {
@@ -367,7 +369,10 @@ namespace CodeCave.NetworkAgilityPack.Web
                     return;
                 }
 
-                long bytesRead;
+                var charset = Response?.Headers[HttpResponseHeader.ContentType] ?? "windows-1252";
+                var contentType = new ContentType(charset);
+                Encoding = contentType.CharSet?.CharsetToEncoding();
+
                 const short numReadsBeforeProgUpdateDefault = 32;
                 var numReadsCounter = numReadsBeforeProgUpdateDefault / 2;
                 var bytesReadSoFar = 0L;
@@ -375,38 +380,46 @@ namespace CodeCave.NetworkAgilityPack.Web
                 var lastUpdateTime = DateTime.Now;
                 var lastUpdateDownloadedSize = 0L;
 
-                do
+                using (var ms = new MemoryStream())
                 {
-                    // Read stream content
-                    bytesRead = streamResponse.Read(bufferRead, 0, bufferRead.Length);
-                    bytesReadSoFar += bytesRead;
-
-                    if (numReadsCounter > numReadsBeforeProgUpdateDefault)
+                    int bytesRead;
+                    do
                     {
-                        // Calculate request progress and report it
-                        var dateTimeNow = DateTime.Now;
-                        var timeDiff = (dateTimeNow - lastUpdateTime).TotalSeconds;
-                        var sizeDiff = bytesReadSoFar - lastUpdateDownloadedSize;
-                        var transferSpeed = Math.Round(sizeDiff / timeDiff / 1024f, 2);
-                        lastUpdateDownloadedSize = bytesReadSoFar;
-                        lastUpdateTime = dateTimeNow;
+                        // Read stream content
+                        bytesRead = streamResponse.Read(bufferRead, 0, bufferRead.Length);
+                        bytesReadSoFar += bytesRead;
 
-                        // Reset reads counter
-                        numReadsCounter = 0;
+                        if (numReadsCounter > numReadsBeforeProgUpdateDefault)
+                        {
+                            // Calculate request progress and report it
+                            var dateTimeNow = DateTime.Now;
+                            var timeDiff = (dateTimeNow - lastUpdateTime).TotalSeconds;
+                            var sizeDiff = bytesReadSoFar - lastUpdateDownloadedSize;
+                            var transferSpeed = Math.Round(sizeDiff / timeDiff / 1024f, 2);
+                            lastUpdateDownloadedSize = bytesReadSoFar;
+                            lastUpdateTime = dateTimeNow;
 
-                        // Report the progress
-                        var args = new WebRequestProgressChangedEventArgs(bytesReadSoFar, totalBytesToRead, DateTime.Now - transferStart, transferSpeed, 99);
-                        OnProgressChanged(args);
+                            // Reset reads counter
+                            numReadsCounter = 0;
+
+                            // Report the progress
+                            var args = new WebRequestProgressChangedEventArgs(bytesReadSoFar, totalBytesToRead, DateTime.Now - transferStart, transferSpeed, 99);
+                            OnProgressChanged(args);
+                        }
+                        else
+                        {
+                            numReadsCounter++;
+                        }
+
+                        ms.Write(bufferRead, 0, bytesRead);
+
+                        CheckIfCancelled(bytesReadSoFar, totalBytesToRead);
                     }
-                    else
-                    {
-                        numReadsCounter++;
-                    }
+                    // go if some amount of bytes has been read and stream can go on reading 
+                    while (bytesRead > 0 && streamResponse.CanRead);
 
-                    CheckIfCancelled(bytesReadSoFar, totalBytesToRead);
+                    content = ms.ToArray();
                 }
-                // go if some amount of bytes has been read and stream can go on reading 
-                while (bytesRead > 0 && streamResponse.CanRead);
 
                 OnProgressCompleted(new WebRequestProgressCompletedEventArgs(bytesReadSoFar, totalBytesToRead, DateTime.Now - transferStart, transferStart, false));
             }
@@ -414,6 +427,7 @@ namespace CodeCave.NetworkAgilityPack.Web
             {
                 Exception = ex;
                 bufferRead = null;
+                content = null;
                 throw;
             }
             finally
@@ -460,7 +474,28 @@ namespace CodeCave.NetworkAgilityPack.Web
             statusCode = -1;
             totalBytes = null;
             cancelAsync = false;
-            Encoding = Encoding.UTF8;
+            content = null;
+        }
+
+        /// <summary>
+        /// Gets the content.
+        /// </summary>
+        /// <value>
+        /// The content.
+        /// </value>
+        public byte[] GetContent() => content;
+
+        /// <summary>
+        /// Gets the content as string.
+        /// </summary>
+        /// <param name="encoding">The encoding for the string.</param>
+        /// <returns></returns>
+        public string GetContentString(Encoding encoding = null)
+        {
+            var enc = encoding ?? Encoding ?? Encoding.UTF8;
+            return (content == null)
+                ? null
+                : enc.GetString(content);
         }
 
         #endregion

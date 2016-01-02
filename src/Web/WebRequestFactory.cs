@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Web;
 using CodeCave.NetworkAgilityPack.Http;
@@ -60,6 +61,15 @@ namespace CodeCave.NetworkAgilityPack.Web
             // Set HTTP request type (POST, GET etc)
             requestResult.Request.Method = type.ToString().ToUpperInvariant();
 
+            // Override headers if needed
+            if (settings?.Headers != null)
+                requestResult.AddHeaders(settings.Headers);
+
+            // Set request encoding
+            var requestEncoding = settings?.Encoding ?? Encoding.UTF8;
+            if (string.IsNullOrWhiteSpace(settings?.Headers[HttpRequestHeader.AcceptCharset]))
+                requestResult.Request.Headers[HttpRequestHeader.AcceptCharset] = requestEncoding.WebName;
+
             // Forcibly set a ContentType header on POST/PUT/DELETE request
             switch (type)
             {
@@ -70,13 +80,18 @@ namespace CodeCave.NetworkAgilityPack.Web
                         requestResult.Request.ContentType = "application/x-www-form-urlencoded";
 
                     // Send request BODY if needed
-                    var postDataBytes = (settings?.Encoding ?? Encoding.UTF8).GetBytes(requestDataString);
+                    var postDataBytes = requestEncoding.GetBytes(requestDataString);
                     requestResult.Request.ContentLength = postDataBytes.Length;
                     using (var stream = requestResult.Request.GetRequestStream())
                     {
                         stream.Write(postDataBytes, 0, postDataBytes.Length);
                         stream.Close();
                     }
+                    break;
+
+                default:
+                    if (string.IsNullOrWhiteSpace(requestResult.Request.ContentType))
+                        requestResult.Request.ContentType = $"text/html; charset={requestEncoding.WebName}";
                     break;
             }
 

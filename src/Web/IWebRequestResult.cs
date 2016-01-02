@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Text;
 
@@ -69,6 +70,30 @@ namespace CodeCave.NetworkAgilityPack.Web
         /// Sends request asynchronously.
         /// </summary>
         void SendAsync();
+
+        /// <summary>
+        /// Cancels the asynchronous SendAsync method execution.
+        /// </summary>
+        void CancelAsync();
+
+        /// <summary>
+        /// Adds the headers.
+        /// </summary>
+        /// <param name="headers">The headers.</param>
+        void AddHeaders(Dictionary<HttpRequestHeader, string> headers);
+
+        /// <summary>
+        /// Gets the content.
+        /// </summary>
+        /// <returns></returns>
+        byte[] GetContent();
+
+        /// <summary>
+        /// Gets the content as string.
+        /// </summary>
+        /// <param name="encoding">The encoding for the string.</param>
+        /// <returns></returns>
+        string GetContentString(Encoding encoding = null);
 
         #region Events
 
