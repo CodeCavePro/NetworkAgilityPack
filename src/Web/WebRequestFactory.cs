@@ -6,15 +6,19 @@ using System.Web;
 using CodeCave.NetworkAgilityPack.Http;
 using CodeCave.NetworkAgilityPack.Socks.Web;
 
-#if !NET40
-
-#endif
-
 namespace CodeCave.NetworkAgilityPack.Web
 {
     public class WebRequestFactory
     {
-
+        /// <summary>
+        /// Creates a request to the specified URI.
+        /// </summary>
+        /// <param name="uri">The URI to send request to.</param>
+        /// <param name="type">Request type.</param>
+        /// <param name="requestData">Request data.</param>
+        /// <param name="settings">Request settings.</param>
+        /// <returns></returns>
+        /// <exception cref="System.NotImplementedException">Only http://xxxx and https://xxxx URI are supported!</exception>
         public static IWebRequestResult Create(
             Uri uri, 
             KnownHttpVerb type = KnownHttpVerb.Get, 
@@ -28,7 +32,7 @@ namespace CodeCave.NetworkAgilityPack.Web
             var requestDataString = string.Empty;
             if (requestData != null && requestData.Any())
             {
-                // Agregate all the parameters in a query string
+                // Aggregate all the parameters in a query string
                 requestDataString = requestData.Aggregate(string.Empty, (current, varSet) => current + $"{HttpUtility.UrlPathEncode(varSet.Key)}={HttpUtility.UrlEncode(varSet.Value)}");
             }
 

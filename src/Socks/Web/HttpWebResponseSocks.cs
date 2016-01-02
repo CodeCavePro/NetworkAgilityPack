@@ -118,7 +118,11 @@ namespace CodeCave.NetworkAgilityPack.Socks.Web
         /// Releases unmanaged and - optionally - managed resources.
         /// </summary>
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+#if NET40
+        private void Dispose(bool disposing)
+#else
         protected override void Dispose(bool disposing)
+#endif
         {
             if (disposing)
             {
@@ -135,24 +139,29 @@ namespace CodeCave.NetworkAgilityPack.Socks.Web
                     _responseStream = null;
                 }
             }
-
+#if !NET40
             base.Dispose(disposing);
+#endif
         }
 
         /// <summary>
         /// Releases unmanaged and - optionally - managed resources.
         /// </summary>
+#if NET40
+        public void Dispose()
+#else
         public new void Dispose()
+#endif
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        #endregion WebResponse Members
+#endregion WebResponse Members
 
-        #endregion Methods
+#endregion Methods
 
-        #region Properties
+#region Properties
 
         /// <summary>
         /// Gets the status code.
@@ -209,7 +218,11 @@ namespace CodeCave.NetworkAgilityPack.Socks.Web
         /// <value>
         ///   <c>true</c> if response object [supports headers]; otherwise, <c>false</c>.
         /// </value>
+#if NET40
+        public bool SupportsHeaders => true;
+#else
         public override bool SupportsHeaders => true;
+#endif
 
         /// <summary>
         /// Gets the response URI.
@@ -235,6 +248,6 @@ namespace CodeCave.NetworkAgilityPack.Socks.Web
         /// </value>
         public override bool IsFromCache => false;
 
-        #endregion Properties
+#endregion Properties
     }
 }

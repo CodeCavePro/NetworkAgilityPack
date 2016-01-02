@@ -2,31 +2,30 @@
 <package xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <id>NetworkAgilityPack</id>
-    <version>0.2</version>
+    <version>0.3.2</version>
     <authors>Zhmayev Yaroslav</authors>
     <owners>Zhmayev Yaroslav</owners>
     <licenseUrl>https://raw.githubusercontent.com/CodeCavePro/NetworkAgilityPack/master/LICENSE.md</licenseUrl>
     <projectUrl>https://github.com/CodeCavePro/NetworkAgilityPack</projectUrl>
     <iconUrl>https://github.com/CodeCavePro/NetworkAgilityPack/raw/master/doc/logo/logo.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <tags>web http request proxy</tags>
+    <tags>web http request response socks proxy</tags>
     <description>A set of tools that help developers to interact with Web and other Internet resources</description>
     <releaseNotes>
     </releaseNotes>
     <summary>A set of tools that help developers to interact with Web and other Internet resources</summary>
     <language>en-US</language>
     <copyright>Copyright CodeCave 2015</copyright>
-    <dependencies>
-        <group targetFramework="net40">
-          <dependency id="log4net" version="1.2.10" />
-        </group>
-    </dependencies>
+    <dependencies></dependencies>
     <references></references>
   </metadata>
   <files>
-    <file src="..\bin\Debug\*.dll" target="lib" /> 
-    <file src="..\bin\Debug\*.pdb" target="lib" /> 
-    <file src="tools\" target="tools" />
+    <file src="..\bin\Release\net40\*.dll" target="lib\net40\" /> 
+    <file src="..\bin\Release\net40\*.pdb" target="lib\net40\" />
+    <file src="..\bin\Release\net45\*.dll" target="lib\net45\" />
+    <file src="..\bin\Release\net45\*.pdb" target="lib\net45\" />
+    <file src="..\bin\Release\*.xml" target="content\docs" />
     <file src="..\content\" target="content" />
+    <file src="tools\" target="tools" />
   </files>
 </package>
