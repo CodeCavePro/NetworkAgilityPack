@@ -37,7 +37,7 @@ namespace CodeCave.NetworkAgilityPack.Web
             if (requestData != null && requestData.Any())
             {
                 // Aggregate all the parameters in a query string
-                requestDataString = requestData.Aggregate(string.Empty, (current, varSet) => current + $"{HttpUtility.UrlPathEncode(varSet.Key)}={HttpUtility.UrlEncode(varSet.Value)}");
+                requestDataString = string.Join("&", requestData.Select(varSet => $"{HttpUtility.UrlPathEncode(varSet.Key)}={HttpUtility.UrlEncode(varSet.Value)}"));
             }
 
             // Append data in GET/HEAD format
