@@ -70,7 +70,7 @@ namespace CodeCave.NetworkAgilityPack.Web
 
             // Set request encoding
             var requestEncoding = settings?.Encoding ?? Encoding.UTF8;
-            if (string.IsNullOrWhiteSpace(settings?.Headers[HttpRequestHeader.AcceptCharset]))
+            if (settings?.Headers.ContainsKey(HttpRequestHeader.AcceptCharset) ?? false && string.IsNullOrWhiteSpace(settings?.Headers[HttpRequestHeader.AcceptCharset]))
                 requestResult.Request.Headers[HttpRequestHeader.AcceptCharset] = requestEncoding.WebName;
 
             // Forcibly set a ContentType header on POST/PUT/DELETE request
